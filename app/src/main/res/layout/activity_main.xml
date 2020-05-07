@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <cn.licht.mobile.anim.RippleLinearLayout
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:id="@+id/textfm"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+
+                    <cn.licht.mobile.anim.RippleImageView
+                        android:id="@+id/imgaaaa"
+                        android:src="@drawable/ic_key_safe_del"
+                        android:scaleType="fitXY"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"/>
+                    <cn.licht.mobile.anim.RippleTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="飞艇"
+                        android:textColor="@color/text_color_333333"
+                        android:textSize="@dimen/text_size_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"/>
+
+
+            </cn.licht.mobile.anim.RippleLinearLayout>
+            <cn.licht.mobile.anim.RippleTextView
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_gravity="center"
+                android:text="卧槽你妹啊啊啊啊"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <include layout="@layout/h5_toast_text_view_layout" android:layout_marginTop="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <cn.licht.mobile.anim.CU
+                android:id="@+id/bass"
+                android:src="@drawable/icon_close_flashlight"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                />
+            <cn.licht.mobile.anim.RippleLinearLayout
+                android:background="@color/permissions_bg_endcolor"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:onClick="oo"
+                android:id="@+id/pp"
+                />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:foreground="@drawable/asx_a"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:id="@+id/cc"/>
+
+            <cn.licht.mobile.anim.PlaceLoad
+                android:id="@+id/pload"
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#213211"
+                android:onClick="sss" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

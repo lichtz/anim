@@ -1,0 +1,42 @@
+<resources>
+
+    // 网络提示
+    <string name="error_network">对不起，网络连接失败，请检查网络后再试</string>
+    <string name="error_network_timeout">请求超时，网络不给力</string>
+    <string name="error_network_io">请求失败，请确认网络是否可用</string>
+    <string name="error_network_error">网络出错，请稍后再试</string>
+    <string name="error_network_error9">请求异常，请稍后再试</string>
+    <string name="error_network_rpc">请求异常，网络不给力(%1$d)</string>               // 试运行阶段提示
+
+    <string name="cancel">取消</string>
+    <string name="finish">完成</string>
+    <string name="confirm">确定</string>
+    <string name="title_tips">温馨提示</string>
+    <string name="open">开启</string>
+
+    // loading提示
+    <string name="loading_tips">加载中...</string>
+
+    //权限提醒
+    <string name="permission_button_settings">去设置</string>
+
+    // 加密键盘
+    <string name="key_safe_title">广发银行安全键盘</string>
+    <string name="transact_pwd_title">请输入取款密码</string>
+
+    <string name="permission_name_calendar">Calendar</string>
+    <string name="permission_name_camera">Camera</string>
+    <string name="permission_name_contacts">Contacts</string>
+    <string name="permission_name_location">Location</string>
+    <string name="permission_name_microphone">Microphone</string>
+    <string name="permission_name_phone">Phone</string>
+    <string name="permission_name_sensors">Body Sensors</string>
+    <string name="permission_name_sms">SMS</string>
+    <string name="permission_name_storage">Storage</string>
+
+    <string name="location_content">未识别到位置信息，请打开手机定位功能</string>
+
+    <string name="please_input_text">请输入文字内容</string>
+    <string name="please_set_guide_image">请设置引导图片</string>
+
+</resources>

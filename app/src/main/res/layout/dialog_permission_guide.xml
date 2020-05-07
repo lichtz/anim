@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="270dp"
+    android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content">
+                
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/permissions_guide_dialog_bg"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp">
+
+                <TextView
+                    android:textStyle="bold"
+                    android:id="@+id/pname"
+                    tools:text="获取定位权限"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp" />
+                <TextView
+                    android:id="@+id/pcontent"
+                    android:layout_marginTop="4dp"
+                    android:textColor="#999999"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="1.2"
+                    tools:text="手机银行需要调用您的位置权限，用于提供更准确的资讯及金融服务。"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <Button
+                    android:id="@+id/bsubmit"
+                    android:background="@drawable/permissions_guide_dialog_button_bg"
+                    android:layout_marginTop="32dp"
+                    android:text="去授权"
+                    android:textSize="16sp"
+                    android:textColor="#ffffff"
+                    android:layout_width="164dp"
+                    android:layout_height="40dp" />
+
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_marginTop="22dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:text=" 不再提醒"
+                    android:textColor="#999999"
+                    android:textSize="15sp"
+                    android:button="@drawable/dialog_permission_bg"
+                   />
+
+                <TextView
+                    android:lineSpacingMultiplier="1.2"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="(后续可在手机-设置-权限管理路径下自行设置)"
+                    android:textColor="#999999"
+                    android:textSize="12sp" />
+
+        </LinearLayout>
+                <ImageButton
+                    android:background="@drawable/ico_dialog_close"
+                    android:id="@+id/ic_close"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="28dp"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/plogo"
+            tools:src="@drawable/map"
+            android:layout_width="120dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center_horizontal"
+           />
+</FrameLayout>

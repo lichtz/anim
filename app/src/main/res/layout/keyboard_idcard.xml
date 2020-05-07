@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/key_title_bg">
+
+        <ImageView
+            android:id="@+id/iv_down"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_down_disable" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_finish"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_marginRight="16dp"-->
+<!--            android:textColor="@color/text_color_333333"-->
+<!--            android:textSize="@dimen/text_size_16"-->
+<!--            android:text="完成"/>-->
+
+    </RelativeLayout>
+
+    <cn.licht.mobile.anim.widget.keyboard.KeyboardNumView
+        android:id="@+id/ll_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+</LinearLayout>

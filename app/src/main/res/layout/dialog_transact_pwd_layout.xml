@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:background="#F6F6F6"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_keyboard_close"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/text_color_333333"
+            android:text="@string/transact_pwd_title"/>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/transact_user_info_linear"
+        android:layout_marginBottom="17dp"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/zz_title_tv"
+            android:singleLine="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/text_color_333333"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/bank_logo"
+                android:scaleType="centerCrop"
+                android:layout_width="16dp"
+                android:layout_height="16dp" />
+            <TextView
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:id="@+id/phone_num_or_ic_card_tv"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/text_color_333333"
+                android:textSize="13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/text_size_24"
+        android:textColor="@color/text_color_333333"
+        android:layout_marginBottom="8dp"
+       />
+
+    <TextView
+        android:id="@+id/tv_card_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/text_size_13"
+        android:textColor="@color/text_color_999999"
+        android:layout_marginBottom="20dp"
+       />
+
+    <cn.licht.mobile.anim.widget.keyboard.TransactPwdEditText
+        android:id="@+id/tpet_transact_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="number"
+        app:tpet_background_color="@color/white"
+        app:tpet_password_box_color="#d7d7d7"
+        app:tpet_password_text_color="@color/text_color_333333"
+        app:tpet_password_text_length="6"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/key_safe_title">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_logo_keyboard" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text="@string/key_safe_title"
+                android:textSize="@dimen/text_size_16"
+                android:textColor="@color/text_color_333333"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <cn.licht.mobile.anim.widget.keyboard.KeyboardNumView
+        android:id="@+id/k_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f1f1f1"/>
+
+</LinearLayout>

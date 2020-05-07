@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/key_safe_bg_press"/>
+    <stroke android:color="@color/key_safe_stroke" android:width="0.5dp"/>
+    <corners android:radius="@dimen/key_safe_corners"/>
+</shape>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <FrameLayout
+
+            android:id="@+id/ll_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/popupwindow_select_list_title_height"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_13"
+                android:textColor="@color/text_color_b3b3b3"
+            />
+            <View
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/popupwindow_select_item_gap_color"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/ln_contain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="23dp"
+            android:paddingBottom="23dp"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v_gap"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/popupwindow_select_item_gap_color"/>
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/popupwindow_select_item_height"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_16"
+            android:textColor="@color/text_color_333333"
+            android:text="@string/cancel"
+            android:background="#ffffff"/>
+
+    </LinearLayout>
+
+</FrameLayout>

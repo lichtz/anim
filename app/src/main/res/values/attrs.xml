@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TransactPwdEditText">
+        <attr name="tpet_background_color" format="color" />
+        <attr name="tpet_password_text_length" format="integer" />
+        <attr name="tpet_password_text_color" format="color" />
+        <attr name="tpet_password_box_color" format="color"/>
+        <attr name="tpet_password_box_stroke_width" format="dimension"/>
+        <attr name="tpet_password_box_interval" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="MaxScrollView">
+        <!--阴影部分的颜色-->
+        <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+</resources>

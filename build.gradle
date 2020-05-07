@@ -1,0 +1,34 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.booster_version = '1.6.0'
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://oss.sonatype.org/content/repositories/public' }
+    }
+    dependencies {
+        classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version" // ①
+        classpath 'com.android.tools.build:gradle:3.6.0'
+        classpath 'com.didichuxing.doraemonkit:doraemonkit-plugin:3.1.4'
+
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://oss.sonatype.org/content/repositories/public' }
+        
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

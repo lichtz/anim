@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:background="@drawable/shape_share_protocal_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="13dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text=""
+        android:textColor="#333333"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="‘大苏打大飒飒的DSA大撒旦大苏打的阿什顿撒旦撒旦撒旦撒旦" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <cn.licht.mobile.anim.MaxScrollView
+            android:id="@+id/maxscroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="#ffffff"
+            android:minHeight="120dp"
+            android:overScrollMode="never"
+            android:scrollbarSize="4dp"
+            android:scrollbarThumbVertical="@drawable/shape_scrollbar_bg"
+            android:scrollbars="vertical"
+            app:maxHeight="363dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:minHeight="120dp"
+                    android:scrollbars="vertical"
+                    android:textColor="#666666"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+        </cn.licht.mobile.anim.MaxScrollView>
+        <cn.licht.mobile.anim.LongDialogCoverView
+            android:id="@+id/xxf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="28dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/shape_disagree_btn_bg"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/v_divider"
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/shape_agree_btn_bg"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

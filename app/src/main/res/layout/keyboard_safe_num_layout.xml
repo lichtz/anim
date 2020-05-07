@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/key_safe_title">
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:layout_centerInParent="true"-->
+        <!--            android:gravity="center_vertical">-->
+
+        <!--            <ImageView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:src="@mipmap/ic_logo_keyboard" />-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginLeft="2dp"-->
+        <!--                android:text="@string/key_safe_title"-->
+        <!--                android:textSize="@dimen/text_size_16"-->
+        <!--                android:textColor="@color/text_color_333333"/>-->
+
+        <!--        </LinearLayout>-->
+
+        <ImageView
+            android:id="@+id/iv_down"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_down_disable" />
+
+    </RelativeLayout>
+
+    <cn.licht.mobile.anim.widget.keyboard.KeyboardNumView
+        android:id="@+id/k_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff" />
+
+</LinearLayout>

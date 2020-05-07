@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_dialog_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/tv_title_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/text_color_333333"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/text_color_666666"
+            android:textSize="@dimen/text_size_14"
+            android:visibility="visible" />
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:id="@+id/ln_tip"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+           <cn.licht.mobile.anim.widget.CGBCheckbox
+               android:id="@+id/cgb_checkbox"
+               android:layout_gravity="center_vertical"
+               android:layout_width="16dp"
+               android:layout_height="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_gravity="center_vertical"
+                android:textSize="14sp"
+                android:layout_marginStart="4dp"
+                android:textColor="#666666"
+                android:text="不再提醒"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/divider_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:textColor="@color/text_color_333333"
+            android:textSize="@dimen/text_size_15" />
+
+        <View
+            android:id="@+id/v_divider"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_color" />
+
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:textColor="@color/text_color_007aff"
+            android:textSize="@dimen/text_size_15" />
+
+    </LinearLayout>
+
+</LinearLayout>

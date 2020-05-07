@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/popupwindow_select_list_title_height"
+        android:orientation="horizontal"
+        android:background="@color/popupwindow_select_list_title_color">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_13"
+            android:textColor="@color/text_color_b3b3b3" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@drawable/shape_scrollbar_bg"
+        android:scrollbarSize="3dp"
+        android:background="@color/popupwindow_select_item_color"/>
+
+    <View
+        android:id="@+id/v_gap"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/popupwindow_select_item_gap_color"/>
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/popupwindow_select_item_height"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/text_color_333333"
+        android:text="@string/cancel"
+        android:background="#ffffff"/>
+
+</LinearLayout>
