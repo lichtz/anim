@@ -47,6 +47,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import cn.licht.mobile.anim.dialog.BaseDialog;
+import cn.licht.mobile.anim.frzz.FloatViewActivityLifecycleCallbacks;
+import cn.licht.mobile.anim.frzz.FloatViewConstant;
 import cn.licht.mobile.anim.frzz.FloatViewManager;
 import cn.licht.mobile.anim.frzz.FloatViewWraper;
 import cn.licht.mobile.anim.frzz.IFlySpeakFloatView;
@@ -76,7 +78,25 @@ public class MainActivity extends AppCompatActivity {
         });
         imageViewaa = findViewById(R.id.pload);
         View textFm = findViewById(R.id.textfm);
+        View hellov = findViewById(R.id.hellv);
 
+        hellov.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FloatViewManager.getInstance().detach(IFlySpeakFloatView.class);
+
+                Log.i("zylbug","setOnClickListener");
+
+            }
+        });
+
+        hellov.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("zylbug","setOnTouchListener");
+                return false;
+            }
+        });
         int scaledTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
         Log.d(TAG, "onCreate: scaleTouchSlop"+ scaledTouchSlop);
         int longPressTimeout = ViewConfiguration.getLongPressTimeout();
@@ -208,8 +228,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void oo(View view) {
-        FloatViewWraper floatViewWraper = new FloatViewWraper(IFlySpeakFloatView.class, this);
-        FloatViewManager.getInstance().attach(floatViewWraper);
+        FloatViewManager.getInstance().init(getApplication());
+        FloatViewWraper floatViewWraper = new FloatViewWraper(IFlySpeakFloatView.class, getClass().getCanonicalName());
+        FloatViewManager.getInstance().attach(this,floatViewWraper);
 
+
+    }
+
+    public void dettach(View view) {
     }
 }

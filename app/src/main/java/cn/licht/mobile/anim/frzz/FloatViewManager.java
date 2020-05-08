@@ -1,6 +1,7 @@
 package cn.licht.mobile.anim.frzz;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Point;
 import android.text.TextUtils;
@@ -11,10 +12,11 @@ import java.util.Map;
 
 public class FloatViewManager  implements FloatViewManagerInterface{
 
-    private Context mContext;
+    private Application mApplication;
     private Map<String, FloatViewPosInfo> mFloatViewPosInfoMaps;
     private  Map<String, Point> mFloatViewPos;
     private FloatViewManagerInterface mFloatViewManager;
+    private FloatViewActivityLifecycleCallbacks floatViewActivityLifecycleCallbacks;
 
 
     private static class Holder {
@@ -25,27 +27,30 @@ public class FloatViewManager  implements FloatViewManagerInterface{
         return Holder.INSTANCE;
     }
 
-    public void init(Context context) {
-        mContext = context;
-        if (FloatViewConstant.IS_SYSTEM_FLOAT_MODE) {
-            mFloatViewManager = new SystemFloatViewManager(context);
+    public synchronized void init(Application application) {
+        if (mApplication != null){
+            return;
+        }
+        mApplication = application;
+        floatViewActivityLifecycleCallbacks = new FloatViewActivityLifecycleCallbacks();
+         application.registerActivityLifecycleCallbacks(floatViewActivityLifecycleCallbacks);
+        if (FloatViewConstant.isSystemFloatMode()) {
+            mFloatViewManager = new SystemFloatViewManager(application);
         }else {
-            mFloatViewManager = new NormalFloatViewManager(context);
+            mFloatViewManager = new NormalFloatViewManager(application);
         }
         mFloatViewPos = new HashMap<>();
         mFloatViewPosInfoMaps = new HashMap<>();
     }
 
-
-
-
     @Override
-    public void attach(FloatViewWraper floatViewData) {
+    public void attach(Activity activity,FloatViewWraper floatViewData) {
         if (mFloatViewManager != null){
-            mFloatViewManager.attach(floatViewData);
+            mFloatViewManager.attach(activity,floatViewData);
         }
 
     }
+
 
     @Override
     public void detach(AbsFloatView absFloatView) {
@@ -162,7 +167,11 @@ public class FloatViewManager  implements FloatViewManagerInterface{
 
 
     WindowManager getWindowManager() {
-        return (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        if (mApplication != null) {
+            return (WindowManager) mApplication.getSystemService(Context.WINDOW_SERVICE);
+        }else {
+            return  null;
+        }
     }
 
     public FloatViewPosInfo getFloatViewPosInfo(String key) {
@@ -211,30 +220,4 @@ public class FloatViewManager  implements FloatViewManagerInterface{
     }
 
 
-    /**
-     * 系统悬浮窗需要调用
-     *
-     * @param listener
-     */
-    void addFloatViewAttachedListener(FloatViewAttachedListener listener) {
-        if (mFloatViewManager != null) {
-            if (FloatViewConstant.IS_SYSTEM_FLOAT_MODE && mFloatViewManager instanceof SystemFloatViewManager) {
-                ((SystemFloatViewManager) mFloatViewManager).addListener(listener);
-            }
-        }
-
-    }
-
-    void removeDokitViewAttachedListener(FloatViewAttachedListener listener) {
-        if (mFloatViewManager != null) {
-            if (FloatViewConstant.IS_SYSTEM_FLOAT_MODE && mFloatViewManager instanceof SystemFloatViewManager) {
-                ((SystemFloatViewManager) mFloatViewManager).removeListener(listener);
-            }
-        }
-    }
-
-
-    public interface FloatViewAttachedListener {
-        void onFloatViewAdd(AbsFloatView absFloatView);
-    }
 }

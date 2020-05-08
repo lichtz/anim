@@ -29,5 +29,15 @@ public class FloatViewLayoutParams {
     public int y;
     public int width;
     public int height;
-
+    @Override
+    public String toString() {
+        return "FloatViewLayoutParams{" +
+                "flags=" + flags +
+                ", gravity=" + gravity +
+                ", x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
+    }
 }

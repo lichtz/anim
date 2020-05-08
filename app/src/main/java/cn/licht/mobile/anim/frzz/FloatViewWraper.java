@@ -1,29 +1,27 @@
 package cn.licht.mobile.anim.frzz;
 
-import android.app.Activity;
-
-import com.didichuxing.doraemonkit.kit.core.AbsDokitView;
-
 public class FloatViewWraper {
-    private Activity bindActivity;
-    private Class<? extends AbsFloatView> floatView;
-    private String tag;
 
-    public FloatViewWraper(Class<? extends AbsFloatView> floatView,Activity activity) {
+    private String activityCanonicalName;
+    private Class<? extends AbsFloatView> floatView;
+    private String floatViewName;
+    public int mode = FloatViewConstant.MODE_GLOBAL_FLOAT_VIEW;
+
+    public FloatViewWraper(Class<? extends AbsFloatView> floatView,String activityCanonicalName) {
         this.floatView = floatView;
-        tag = floatView.getSimpleName();
-        this.bindActivity = activity;
+        floatViewName = floatView.getSimpleName();
+        this.activityCanonicalName = activityCanonicalName;
     }
 
-    public String getTag() {
-        return tag;
+    public String getFloatViewName() {
+        return floatViewName;
     }
 
     public Class<? extends AbsFloatView> getFloatView() {
         return floatView;
     }
 
-    public Activity getActivity() {
-        return bindActivity;
+    public String getBindActivityCanonicalName() {
+        return activityCanonicalName;
     }
 }

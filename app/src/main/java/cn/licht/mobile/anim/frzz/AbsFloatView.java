@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -26,11 +27,11 @@ import java.lang.ref.WeakReference;
 import cn.licht.mobile.anim.Utils;
 
 
-public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouchEventListener, FloatViewManager.FloatViewAttachedListener {
-    private String TAG  = this.getClass().getSimpleName();
-    public String mTag = TAG;
+public abstract class AbsFloatView implements IFLoatView, FloatDispatchTouchProxy.OnDispatchTouchEventListener {
+    private String TAG = this.getClass().getSimpleName();
+    public String mFloatViewName = TAG;
     private Handler mHandler;
-    public FloatTouchProxy floatTouchProxy = new FloatTouchProxy(this);
+    public FloatDispatchTouchProxy floatDispatchTouchProxy = new FloatDispatchTouchProxy(this);
     private WindowManager mWindowManager = FloatViewManager.getInstance().getWindowManager();
     private AbsFloatView.InnerReceiver mInnerReceiver;
     private FloatViewPosInfo mFloatViewPosInfo;
@@ -60,12 +61,12 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
 
     public AbsFloatView() {
         TAG = getClass().getSimpleName();
-        mTag = TAG;
-        if (FloatViewManager.getInstance().getFloatViewPosInfo(mTag) == null) {
+        mFloatViewName = TAG;
+        if (FloatViewManager.getInstance().getFloatViewPosInfo(mFloatViewName) == null) {
             mFloatViewPosInfo = new FloatViewPosInfo();
-            FloatViewManager.getInstance().saveFloatViewPosInfo(mTag, mFloatViewPosInfo);
+            FloatViewManager.getInstance().saveFloatViewPosInfo(mFloatViewName, mFloatViewPosInfo);
         } else {
-            mFloatViewPosInfo = FloatViewManager.getInstance().getFloatViewPosInfo(mTag);
+            mFloatViewPosInfo = FloatViewManager.getInstance().getFloatViewPosInfo(mFloatViewName);
         }
         mHandler = new Handler(Looper.getMainLooper());
     }
@@ -73,9 +74,6 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
     public void performCreate(Context context) {
         try {
             onCreate(context);
-            if (isSystemMode()) {
-                FloatViewManager.getInstance().addFloatViewAttachedListener(this);
-            }
             if (isSystemMode()) {
                 mRootView = new FloatFramelayout(context) {
                     @Override
@@ -95,17 +93,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
             addViewTreeObserverListener();
             mChildView = onCreateView(context, mRootView);
             mRootView.addView(mChildView);
-            mRootView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (getRootView() != null) {
-                        return floatTouchProxy.onTouchEvent(v, event);
-                    } else {
-                        return false;
-                    }
-                }
-            });
-
+            mRootView.setOnTouchProxy(floatDispatchTouchProxy);
             onViewCreated(mRootView);
             mFloatViewLayoutParams = new FloatViewLayoutParams();
             if (isSystemMode()) {
@@ -145,7 +133,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
 
 
         } catch (Exception e) {
-
+            Log.i("zyl",e.getMessage());
         }
 
 
@@ -171,6 +159,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
         mRootView = null;
         onDestroy();
     }
+
     private void removeViewTreeObserverListener() {
         if (mViewTreeObserver != null && mOnGlobalLayoutListener != null) {
             if (mViewTreeObserver.isAlive()) {
@@ -179,6 +168,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
         }
 
     }
+
     private void onNormalLayoutParamsCreated(FrameLayout.LayoutParams params) {
         params.gravity = mFloatViewLayoutParams.gravity;
         params.width = mFloatViewLayoutParams.width;
@@ -192,7 +182,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
         params.gravity = mFloatViewLayoutParams.gravity;
         params.width = mFloatViewLayoutParams.width;
         params.height = mFloatViewLayoutParams.height;
-        Point point = FloatViewManager.getInstance().getFloatViewPos(mTag);
+        Point point = FloatViewManager.getInstance().getFloatViewPos(mFloatViewName);
         if (point != null) {
             params.x = point.x;
             params.y = point.y;
@@ -203,7 +193,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
     }
 
     private void portraitOrLandscape(FrameLayout.LayoutParams params) {
-        Point point = FloatViewManager.getInstance().getFloatViewPos(mTag);
+        Point point = FloatViewManager.getInstance().getFloatViewPos(mFloatViewName);
         if (point != null) {
             //横竖屏切换兼容
             if (Utils.isPortrait(getContext())) {
@@ -243,9 +233,9 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
                 }
             }
         }
-        mFloatViewPosInfo.setPortrait();
-        mFloatViewPosInfo.setLeftMargin(params.leftMargin);
-        mFloatViewPosInfo.setTopMargin(params.topMargin);
+        mFloatViewPosInfo.setPortrait(Utils.isPortrait(getContext()));
+        mFloatViewPosInfo.setLeftMargin(Utils.getAppScreenWidth(getContext()),params.leftMargin);
+        mFloatViewPosInfo.setTopMargin(Utils.getAppScreenHeight(getContext()),params.topMargin);
     }
 
     public boolean isSystemMode() {
@@ -329,9 +319,8 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
         } else {
             mFrameLayoutParams.leftMargin += dx;
             mFrameLayoutParams.topMargin += dy;
-            updateViewLayout(mTag, false);
+            updateViewLayout(mFloatViewName, false);
         }
-        Log.i("zylgg"," x: "+x +"  y: "+y+" dx: "+dx+"  dy: "+dy);
     }
 
     @Override
@@ -339,13 +328,16 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
         if (!canDrag()) {
             return;
         }
+        saveFloatViewPos();
+    }
+
+    public void saveFloatViewPos()
+    {
         if (isSystemMode()) {
-            FloatViewManager.getInstance().saveFloatViewPos(mTag, mWindowlayoutParams.x, mWindowlayoutParams.y);
+            FloatViewManager.getInstance().saveFloatViewPos(mFloatViewName, mWindowlayoutParams.x, mWindowlayoutParams.y);
         } else {
-            FloatViewManager.getInstance().saveFloatViewPos(mTag, mFrameLayoutParams.leftMargin, mFrameLayoutParams.topMargin);
+            FloatViewManager.getInstance().saveFloatViewPos(mFloatViewName, mFrameLayoutParams.leftMargin, mFrameLayoutParams.topMargin);
         }
-
-
     }
 
     @Override
@@ -364,27 +356,29 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
                 mFrameLayoutParams.topMargin = point.y;
             }
         } else {
-            mFloatViewPosInfo.setLeftMargin(mFrameLayoutParams.leftMargin);
-            mFloatViewPosInfo.setTopMargin(mFrameLayoutParams.topMargin);
+            mFloatViewPosInfo.setLeftMargin(Utils.getAppScreenWidth(getContext()),mFrameLayoutParams.leftMargin);
+            mFloatViewPosInfo.setTopMargin(Utils.getAppScreenHeight(getContext()),mFrameLayoutParams.topMargin);
         }
         checkBorderLine(mFrameLayoutParams);
         mRootView.setLayoutParams(mFrameLayoutParams);
     }
 
     private void checkBorderLine(FrameLayout.LayoutParams params) {
-        if (!restrictBorderline() || isSystemMode()) {
+        if ( isSystemMode()) {
             return;
         }
         if (params.topMargin <= 0) {
             params.topMargin = 0;
         }
         if (Utils.isPortrait(getContext())) {
-            if (params.topMargin >= Utils.getScreenLongSideLength(getContext()) - floatViewHeight) {
-                params.topMargin = Utils.getScreenLongSideLength(getContext()) - floatViewHeight;
+            int screenLongSideLength = Utils.getScreenLongSideLength(getContext());
+            if (params.topMargin >= screenLongSideLength - floatViewHeight) {
+                params.topMargin = screenLongSideLength - floatViewHeight;
             }
         } else {
-            if (params.topMargin >= Utils.getScreenShortSideLength(getContext()) - floatViewHeight) {
-                params.topMargin = Utils.getScreenShortSideLength(getContext()) - floatViewHeight;
+            int screenShortSideLength = Utils.getScreenShortSideLength(getContext());
+            if (params.topMargin >=  screenShortSideLength- floatViewHeight) {
+                params.topMargin = screenShortSideLength - floatViewHeight;
             }
         }
         if (params.leftMargin <= 0) {
@@ -392,20 +386,20 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
         }
 
         if (Utils.isPortrait(getContext())) {
-            if (params.leftMargin >= Utils.getScreenShortSideLength(getContext()) - floatViewWidth) {
-                params.leftMargin = Utils.getScreenShortSideLength(getContext()) - floatViewWidth;
+            int screenShortSideLength = Utils.getScreenShortSideLength(getContext());
+            if (params.leftMargin >= screenShortSideLength - floatViewWidth) {
+                params.leftMargin = screenShortSideLength - floatViewWidth;
             }
-        } else {
-            if (params.leftMargin >= Utils.getScreenLongSideLength(getContext()) - floatViewWidth) {
-                params.leftMargin = Utils.getScreenLongSideLength(getContext()) - floatViewWidth;
+        } else{
+            int screenLongSideLength = Utils.getScreenLongSideLength(getContext());
+            if (params.leftMargin >= screenLongSideLength- floatViewWidth) {
+                params.leftMargin =screenLongSideLength - floatViewWidth;
             }
         }
 
     }
 
-    public boolean restrictBorderline() {
-        return true;
-    }
+
 
     public FloatFramelayout getRootView() {
         return mRootView;
@@ -455,16 +449,15 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
     }
 
     public void post(Runnable r) {
-        mHandler.post(r);
+        if (mHandler != null) {
+            mHandler.post(r);
+        }
     }
 
     public void postDelayed(Runnable r, long delayMillis) {
-        mHandler.postDelayed(r, delayMillis);
-    }
-
-    @Override
-    public void onFloatViewAdd(AbsFloatView absFloatView) {
-
+        if (mHandler != null) {
+            mHandler.postDelayed(r, delayMillis);
+        }
     }
 
     public void setFloatViewNotResponseTouchEvent(View view) {
@@ -486,17 +479,20 @@ public abstract class AbsFloatView implements IFLoatView, FloatTouchProxy.OnTouc
     }
 
     public void invalidate() {
-        if (mRootView != null && mFrameLayoutParams != null) {
-            mRootView.setLayoutParams(mFrameLayoutParams);
+        if (isSystemMode()) {
+            if (mWindowManager != null && mRootView != null && mWindowlayoutParams != null) {
+                mWindowManager.updateViewLayout(mRootView, mWindowlayoutParams);
+            }
+        } else {
+            if (mRootView != null && mFrameLayoutParams != null) {
+                mRootView.setLayoutParams(mFrameLayoutParams);
+            }
         }
     }
 
     @Override
     public void onDestroy() {
-        if (isSystemMode()) {
-            FloatViewManager.getInstance().removeDokitViewAttachedListener(this);
-        }
-        FloatViewManager.getInstance().removeFloatViewPosInfo(mTag);
+        FloatViewManager.getInstance().removeFloatViewPosInfo(mFloatViewName);
         mAttachActivity = null;
 
     }

@@ -3,34 +3,31 @@ package cn.licht.mobile.anim.frzz;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 
 import cn.licht.mobile.anim.Utils;
 
 
 public class FloatViewActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
+    private static final String TAG = "FloatViewActivityLifecy";
 
-    private int startedActivityCounts;
-    private final FloatViewFragmentLifecycleCallbacks floatViewFragmentLifecycleCallbacks;
 
-    public FloatViewActivityLifecycleCallbacks() {
-        floatViewFragmentLifecycleCallbacks = new FloatViewFragmentLifecycleCallbacks();
-    }
+    private int startedActivityCounts = 1;
+
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: ");
         recordActivityLifeCycleStatus(activity, LIFE_CYCLE_STATUS_CREATE);
-        if (activity instanceof FragmentActivity){
-            ((FragmentActivity)activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(floatViewFragmentLifecycleCallbacks,true);
-        }
-
     }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
+        Log.d(TAG, "onActivityStarted: startedActivityCounts= " + startedActivityCounts);
+
         if (startedActivityCounts == 0) {
             FloatViewManager.getInstance().notifyForeground();
 
@@ -51,6 +48,7 @@ public class FloatViewActivityLifecycleCallbacks implements Application.Activity
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
+        Log.d(TAG, "onActivityStopped: startedActivityCounts= " + startedActivityCounts);
         recordActivityLifeCycleStatus(activity, LIFE_CYCLE_STATUS_STOPPED);
         startedActivityCounts--;
         //通知app退出到后台
@@ -67,16 +65,11 @@ public class FloatViewActivityLifecycleCallbacks implements Application.Activity
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
         recordActivityLifeCycleStatus(activity, LIFE_CYCLE_STATUS_DESTROY);
-
-        //注销fragment的生命周期回调
-        if (activity instanceof FragmentActivity) {
-            ((FragmentActivity) activity).getSupportFragmentManager().unregisterFragmentLifecycleCallbacks(floatViewFragmentLifecycleCallbacks);
-        }
         FloatViewManager.getInstance().onActivityDestroy(activity);
     }
 
     private void resumeAndAttachDokitViews(Activity activity) {
-        if (FloatViewConstant.IS_SYSTEM_FLOAT_MODE) {
+        if (FloatViewConstant.isSystemFloatMode()) {
             //系统模式
             //悬浮窗权限 vivo 华为可以不需要动态权限 小米需要
             if (Utils.canDrawOverlays(activity)) {
@@ -86,9 +79,7 @@ public class FloatViewActivityLifecycleCallbacks implements Application.Activity
                 Utils.requestDrawOverlays(activity);
             }
 
-        }
-        else {
-            //显示内置dokitView icon
+        } else {
             FloatViewManager.getInstance().resumeAndAttachDokitViews(activity);
         }
 
@@ -96,7 +87,7 @@ public class FloatViewActivityLifecycleCallbacks implements Application.Activity
     }
 
     private void recordActivityLifeCycleStatus(Activity activity, int lifeCycleStatus) {
-            ActivityLifecycleInfo activityLifecaycleInfo = FloatViewConstant.ACTIVITY_LIFECYCLE_INFOS.get(activity.getClass().getCanonicalName());
+        ActivityLifecycleInfo activityLifecaycleInfo = FloatViewConstant.ACTIVITY_LIFECYCLE_INFOS.get(activity.getClass().getCanonicalName());
         if (activityLifecaycleInfo == null) {
             activityLifecaycleInfo = new ActivityLifecycleInfo();
             activityLifecaycleInfo.activityName = activity.getClass().getCanonicalName();

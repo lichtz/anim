@@ -6,15 +6,15 @@ import java.util.Map;
 
 public interface FloatViewManagerInterface {
 
-    void attach(FloatViewWraper floatViewData);
+    void attach(Activity activity,FloatViewWraper floatViewData);
 
     void detach(AbsFloatView absFloatView);
 
     void detach(Activity activity,AbsFloatView absFloatView);
 
-    void detach(String tag);
+    void detach(String floatViewName);
 
-    void detach(Activity activity,String tag);
+    void detach(Activity activity,String floatViewName);
 
     void detach(Class<? extends AbsFloatView> absFlowView);
 
@@ -22,7 +22,7 @@ public interface FloatViewManagerInterface {
 
     void detachAll();
 
-   AbsFloatView getFloatView(Activity activity, String tag);
+   AbsFloatView getFloatView(Activity activity, String floatViewName);
 
 
     Map<String, AbsFloatView> getFloatViews(Activity activity);

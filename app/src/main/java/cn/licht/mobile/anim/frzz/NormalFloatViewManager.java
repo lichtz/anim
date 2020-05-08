@@ -6,20 +6,17 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
-
-import com.didichuxing.doraemonkit.kit.core.AbsDokitView;
-import com.didichuxing.doraemonkit.kit.core.DokitIntent;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import cn.licht.mobile.anim.R;
 
 public class NormalFloatViewManager implements FloatViewManagerInterface {
-    private Map<Activity, Map<String, AbsFloatView>> mActivityFloatViews;
+    private Map<String, Map<String, AbsFloatView>> mActivityFloatViews;
     private Map<String, GlobalFloatViewInfo> mGlobalFloatViewInfoMap;
     private Context mContext;
 
@@ -76,12 +73,12 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
 
     @Override
     public void onActivityCreate(Activity activity) {
-        if (mGlobalFloatViewInfoMap == null) {
+        if (activity == null || mGlobalFloatViewInfoMap == null) {
             return;
         }
         for (GlobalFloatViewInfo globalFloatViewInfo : mGlobalFloatViewInfoMap.values()) {
-            FloatViewWraper floatViewWraper = new FloatViewWraper(globalFloatViewInfo.mAbsFloatView,activity);
-            attach(floatViewWraper);
+            FloatViewWraper floatViewWraper = new FloatViewWraper(globalFloatViewInfo.mAbsFloatView, activity.getClass().getCanonicalName());
+            attach(activity, floatViewWraper);
         }
 
     }
@@ -91,58 +88,61 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
         if (mActivityFloatViews == null || activity == null) {
             return;
         }
-        Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activity);
+        Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activity.getClass().getCanonicalName());
         if (mGlobalFloatViewInfoMap != null && mGlobalFloatViewInfoMap.size() > 0) {
             for (GlobalFloatViewInfo globalFloatViewInfo : mGlobalFloatViewInfoMap.values()) {
                 AbsFloatView absFloatView = null;
-                if (floatViewMap != null && floatViewMap.isEmpty()) {
-                    absFloatView = floatViewMap.get(globalFloatViewInfo.mTag);
+                if (floatViewMap != null && !floatViewMap.isEmpty()) {
+                    absFloatView = floatViewMap.get(globalFloatViewInfo.mFloatViewName);
                 }
                 if (absFloatView != null && absFloatView.getRootView() != null) {
                     absFloatView.getRootView().setVisibility(View.VISIBLE);
-                    absFloatView.updateViewLayout(absFloatView.mTag,true);
+                    absFloatView.updateViewLayout(absFloatView.mFloatViewName, true);
                     absFloatView.onResume();
-                }else {
-                    FloatViewWraper floatViewWraper = new FloatViewWraper(globalFloatViewInfo.mAbsFloatView,activity);
-                    attach(floatViewWraper);
+                } else {
+                    FloatViewWraper floatViewWraper = new FloatViewWraper(globalFloatViewInfo.mAbsFloatView, activity.getClass().getCanonicalName());
+                    attach(activity, floatViewWraper);
                 }
             }
         }
     }
 
     @Override
-    public void attach(FloatViewWraper floatViewData) {
+    public void attach(Activity activity, FloatViewWraper floatViewData) {
         try {
-            if (floatViewData == null || floatViewData.getActivity() == null) {
+            if (activity == null || floatViewData == null || floatViewData.getBindActivityCanonicalName() == null) {
                 return;
             }
             if (floatViewData.getFloatView() == null) {
                 return;
             }
 
-
             Map<String, AbsFloatView> floatViewMap;
-            if (mActivityFloatViews.get(floatViewData.getActivity()) == null) {
+            if (mActivityFloatViews.get(floatViewData.getBindActivityCanonicalName()) == null) {
                 floatViewMap = new HashMap<>();
-                mActivityFloatViews.put(floatViewData.getActivity(), floatViewMap);
+                mActivityFloatViews.put(floatViewData.getBindActivityCanonicalName(), floatViewMap);
             } else {
-                floatViewMap = mActivityFloatViews.get(floatViewData.getActivity());
+                floatViewMap = mActivityFloatViews.get(floatViewData.getBindActivityCanonicalName());
             }
-            if (floatViewMap.get(floatViewData.getTag()) != null) {
-                floatViewMap.get(floatViewData.getTag()).updateViewLayout(floatViewData.getTag(), true);
+            if (floatViewMap == null) {
+                return;
+            }
+            AbsFloatView floatView = floatViewMap.get(floatViewData.getFloatViewName());
+            if (floatView != null) {
+                floatView.updateViewLayout(floatViewData.getFloatViewName(), true);
                 return;
             }
             final AbsFloatView absFloatView = floatViewData.getFloatView().newInstance();
-            floatViewMap.put(floatViewData.getTag(), absFloatView);
-            absFloatView.mTag = floatViewData.getTag();
-            absFloatView.setActivity(floatViewData.getActivity());
+            floatViewMap.put(floatViewData.getFloatViewName(), absFloatView);
+            absFloatView.mFloatViewName = floatViewData.getFloatViewName();
+            absFloatView.setActivity(activity);
             absFloatView.performCreate(mContext);
-            if (mGlobalFloatViewInfoMap != null) {
-                mGlobalFloatViewInfoMap.put(floatViewData.getTag(), createGlobalFloatViewInfo(absFloatView));
+            if (floatViewData.mode == FloatViewConstant.MODE_GLOBAL_FLOAT_VIEW && mGlobalFloatViewInfoMap != null && !mGlobalFloatViewInfoMap.containsKey(floatViewData.getFloatViewName())) {
+                mGlobalFloatViewInfoMap.put(floatViewData.getFloatViewName(), createGlobalFloatViewInfo(absFloatView));
             }
-            FrameLayout decorView = (FrameLayout) floatViewData.getActivity().getWindow().getDecorView();
+            FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
             if (absFloatView.getNormalLayoutParams() != null && absFloatView.getRootView() != null) {
-                getFloatViewRootContebtView(floatViewData.getActivity(), decorView).addView(absFloatView.getRootView(), absFloatView.getNormalLayoutParams());
+                getFloatViewRootContentView(activity, decorView).addView(absFloatView.getRootView(), absFloatView.getNormalLayoutParams());
                 absFloatView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -158,7 +158,7 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
 
     }
 
-    private FrameLayout getFloatViewRootContebtView(final Activity bindActivity, FrameLayout decorView) {
+    private FrameLayout getFloatViewRootContentView(final Activity bindActivity, FrameLayout decorView) {
         FrameLayout floatRootView = decorView.findViewById(R.id.floatview_content_id);
         if (floatRootView != null) {
             return (FrameLayout) floatRootView;
@@ -196,76 +196,88 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
 
 
     private GlobalFloatViewInfo createGlobalFloatViewInfo(AbsFloatView absFloatView) {
-        return new GlobalFloatViewInfo(absFloatView.getClass(), absFloatView.mTag);
+        return new GlobalFloatViewInfo(absFloatView.getClass(), absFloatView.mFloatViewName);
     }
 
     @Override
     public void detach(AbsFloatView absFloatView) {
+        detach(absFloatView.mFloatViewName);
 
     }
 
     @Override
     public void detach(Activity activity, AbsFloatView absFloatView) {
+        detach(activity,absFloatView.mFloatViewName);
 
     }
 
     @Override
-    public void detach(String tag) {
-        if (mActivityFloatViews == null) {
+    public void detach(String floatViewName) {
+        if (mActivityFloatViews == null || TextUtils.isEmpty(floatViewName)) {
             return;
         }
         //移除每个activity中指定的dokitView
-        for (Activity activityKey : mActivityFloatViews.keySet()) {
-            Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activityKey);
-            //定位到指定dokitView
-            AbsFloatView floatView = floatViewMap.get(tag);
-            if (floatView == null) {
-                continue;
-            }
-            if (floatView.getRootView() != null) {
-                floatView.getRootView().setVisibility(View.GONE);
-                getFloatViewRootContebtView(floatView.getActivity(), (FrameLayout) activityKey.getWindow().getDecorView()).removeView(floatView.getRootView());
+        for (String activityCanonicalName : mActivityFloatViews.keySet()) {
+            Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activityCanonicalName);
+            try {
+                if (floatViewMap == null){
+                    return;
+                }
+                AbsFloatView floatView = floatViewMap.get(floatViewName);
+                if (floatView == null) {
+                    continue;
+                }
+                if (floatView.getActivity() != null && !floatView.getActivity().isFinishing()) {
+                if (floatView.getRootView() != null) {
+                    floatView.getRootView().setVisibility(View.GONE);
+                    if (floatView.getActivity() != null) {
+                        getFloatViewRootContentView(floatView.getActivity(), (FrameLayout) floatView.getActivity().getWindow().getDecorView()).removeView(floatView.getRootView());
+                        floatView.getActivity().getWindow().getDecorView().requestLayout();
+                    }
+                }
+
+                }
+                floatView.performDestroy();
+
+            } catch (Exception e) {
+
             }
 
-            //移除指定UI
-            //请求重新绘制
-            activityKey.getWindow().getDecorView().requestLayout();
-            //执行dokitView的销毁
-            floatView.performDestroy();
-            //移除map中的数据
-            floatViewMap.remove(tag);
-
+            floatViewMap.remove(floatViewName);
         }
         //同步移除全局指定类型的dokitView
-        if (mGlobalFloatViewInfoMap != null && mGlobalFloatViewInfoMap.containsKey(tag)) {
-            mGlobalFloatViewInfoMap.remove(tag);
+        if (mGlobalFloatViewInfoMap != null ) {
+            mGlobalFloatViewInfoMap.remove(floatViewName);
         }
 
     }
 
     @Override
-    public void detach(Activity activity, String tag) {
-        if (activity == null) {
+    public void detach(Activity activity, String floatViewName) {
+        if (activity == null || TextUtils.isEmpty(floatViewName)) {
             return;
         }
-        Map<String, AbsFloatView> floatViews = mActivityFloatViews.get(activity);
+        Map<String, AbsFloatView> floatViews = mActivityFloatViews.get(activity.getClass().getCanonicalName());
         if (floatViews == null) {
             return;
         }
 
-        AbsFloatView absFloatView = floatViews.get(tag);
-        if (absFloatView  == null){
+        AbsFloatView absFloatView = floatViews.get(floatViewName);
+        if (absFloatView == null) {
             return;
         }
-        if (absFloatView.getRootView() != null){
-            absFloatView.getRootView().setVisibility(View.GONE);
-            getFloatViewRootContebtView(activity,(FrameLayout)activity.getWindow().getDecorView()).removeView(absFloatView.getRootView());
+
+        if (!activity.isFinishing()) {
+            if (absFloatView.getRootView() != null) {
+                absFloatView.getRootView().setVisibility(View.GONE);
+                getFloatViewRootContentView(activity, (FrameLayout) activity.getWindow().getDecorView()).removeView(absFloatView.getRootView());
+            }
+            activity.getWindow().getDecorView().requestLayout();
         }
-        activity.getWindow().getDecorView().requestLayout();
         absFloatView.performDestroy();
-        floatViews.remove(tag);
-        if (mGlobalFloatViewInfoMap != null && mGlobalFloatViewInfoMap.containsKey(tag)) {
-            mGlobalFloatViewInfoMap.remove(tag);
+        floatViews.remove(floatViewName);
+        if (mGlobalFloatViewInfoMap != null ) {
+            mGlobalFloatViewInfoMap.remove(floatViewName);
         }
     }
 
@@ -282,15 +294,31 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
 
     @Override
     public void detachAll() {
-        if (mActivityFloatViews == null){
+        if (mActivityFloatViews == null) {
             return;
         }
-        for (Activity activitiekey : mActivityFloatViews.keySet()){
-            Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activitiekey);
-            getFloatViewRootContebtView(activitiekey,(FrameLayout)activitiekey.getWindow().getDecorView()).removeAllViews();
-            floatViewMap.clear();
+        for (String activityCanonicalName : mActivityFloatViews.keySet()) {
+            Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activityCanonicalName);
+            if (floatViewMap != null && floatViewMap.size() != 0) {
+                for (AbsFloatView absFloatView : floatViewMap.values()) {
+                    Activity activity = absFloatView.getActivity();
+                    if (activity != null && !activity.isFinishing()) {
+                        Window window = activity.getWindow();
+                        if (window != null) {
+                            View decorView = window.getDecorView();
+                            FrameLayout floatViewRootContentView = getFloatViewRootContentView(activity, (FrameLayout) decorView);
+                            if (floatViewRootContentView != null) {
+                                floatViewRootContentView.removeAllViews();
+                            }
+
+                        }
+                    }
+                }
+                floatViewMap.clear();
+            }
+
         }
-        if (mGlobalFloatViewInfoMap != null){
+        if (mGlobalFloatViewInfoMap != null) {
             mGlobalFloatViewInfoMap.clear();
         }
 
@@ -298,17 +326,18 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
     }
 
     @Override
-    public AbsFloatView getFloatView(Activity activity, String tag) {
-        if (TextUtils.isEmpty(tag) || activity == null) {
+    public AbsFloatView getFloatView(Activity activity, String floatViewName) {
+        if (TextUtils.isEmpty(floatViewName) || activity == null) {
             return null;
         }
         if (mActivityFloatViews == null) {
             return null;
         }
-        if (mActivityFloatViews.get(activity) == null) {
+        Map<String, AbsFloatView> absFloatViewMap = mActivityFloatViews.get(activity.getClass().getCanonicalName());
+        if ( absFloatViewMap== null || absFloatViewMap.size() ==0) {
             return null;
         }
-        return mActivityFloatViews.get(activity).get(tag);
+        return absFloatViewMap.get(floatViewName);
     }
 
     @Override
@@ -319,7 +348,7 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
         if (mActivityFloatViews == null) {
             return Collections.emptyMap();
         }
-        Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activity);
+        Map<String, AbsFloatView> floatViewMap = mActivityFloatViews.get(activity.getClass().getCanonicalName());
         if (floatViewMap == null) {
             return Collections.emptyMap();
         } else {
@@ -341,7 +370,7 @@ public class NormalFloatViewManager implements FloatViewManagerInterface {
         for (AbsFloatView dokitView : dokitViewMap.values()) {
             dokitView.performDestroy();
         }
-        mActivityFloatViews.remove(activity);
+        mActivityFloatViews.remove(activity.getClass().getCanonicalName());
     }
 
 

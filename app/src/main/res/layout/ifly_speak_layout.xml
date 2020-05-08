@@ -4,7 +4,14 @@
     <ImageView
         android:id="@+id/control"
         android:src="@drawable/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+        android:layout_width="45dp"
+        android:layout_height="45dp"/>
+
+    <FrameLayout
+        android:id="@+id/voice_control"
+        android:visibility="gone"
+        android:background="#321111"
+        android:layout_width="200dp"
+        android:layout_height="45dp"/>
 
 </FrameLayout>

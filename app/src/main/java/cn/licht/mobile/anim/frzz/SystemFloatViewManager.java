@@ -16,14 +16,13 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
     private WindowManager mWindowManager = FloatViewManager.getInstance().getWindowManager();
     private Context mContext;
     private List<AbsFloatView> mFloatViews = new ArrayList<>();
-    private List<FloatViewManager.FloatViewAttachedListener> mListeners = new ArrayList<>();
 
     public SystemFloatViewManager(Context context) {
         this.mContext = context.getApplicationContext();
     }
 
     @Override
-    public void attach(FloatViewWraper floatViewData) {
+    public void attach(Activity activity ,FloatViewWraper floatViewData) {
         try {
             if (mFloatViews == null) {
                 return;
@@ -39,23 +38,23 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
             AbsFloatView floatView = floatViewData.getFloatView().newInstance();
             mFloatViews.add(floatView);
             floatView.performCreate(mContext);
-            mWindowManager.addView(floatView.getRootView(),floatView.getSystemLayoutParams());
-            floatView.onResume();
-            if (FloatViewConstant.IS_SYSTEM_FLOAT_MODE){
-                for (FloatViewManager.FloatViewAttachedListener floatViewAttachedListener :mListeners) {
-                    floatViewAttachedListener.onFloatViewAdd(floatView);
-                }
+            if (mWindowManager == null){
+                mWindowManager = FloatViewManager.getInstance().getWindowManager();
             }
-
+            if (mWindowManager != null) {
+                mWindowManager.addView(floatView.getRootView(), floatView.getSystemLayoutParams());
+                floatView.onResume();
+            }
         } catch (Exception e) {
 
         }
 
     }
 
+
     @Override
     public void detach(AbsFloatView absFloatView) {
-        detach(absFloatView.getClass().getSimpleName());
+        detach(absFloatView.mFloatViewName);
     }
 
     @Override
@@ -64,14 +63,17 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
     }
 
     @Override
-    public void detach(String tag) {
-        if (TextUtils.isEmpty(tag) || mWindowManager == null || mFloatViews == null) {
+    public void detach(String floatViewName) {
+        if (mWindowManager == null){
+            mWindowManager = FloatViewManager.getInstance().getWindowManager();
+        }
+        if (TextUtils.isEmpty(floatViewName) || mWindowManager == null || mFloatViews == null) {
             return;
         }
 
         for (Iterator<AbsFloatView> it = mFloatViews.iterator(); it.hasNext(); ) {
             AbsFloatView floatView = it.next();
-            if (tag.equals(floatView.mTag)) {
+            if (floatViewName.equals(floatView.mFloatViewName)) {
                 mWindowManager.removeView(floatView.getRootView());
                 floatView.performDestroy();
                 it.remove();
@@ -88,6 +90,7 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
 
     @Override
     public void detach(Class<? extends AbsFloatView> absFlowView) {
+        detach(absFlowView.getSimpleName());
 
     }
 
@@ -101,25 +104,30 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
         if (mFloatViews == null) {
             return;
         }
+        if (mWindowManager == null){
+            mWindowManager = FloatViewManager.getInstance().getWindowManager();
+        }
         for (Iterator<AbsFloatView> it = mFloatViews.iterator(); it.hasNext(); ) {
             AbsFloatView floatView = it.next();
-            mWindowManager.removeView(floatView.getRootView());
+            if (mWindowManager != null) {
+                mWindowManager.removeView(floatView.getRootView());
+            }
             floatView.performDestroy();
             it.remove();
         }
     }
 
     @Override
-    public AbsFloatView getFloatView(Activity activity, String tag) {
+    public AbsFloatView getFloatView(Activity activity, String floatViewName) {
         if (mFloatViews == null) {
             return null;
         }
-        if (TextUtils.isEmpty(tag)) {
+        if (TextUtils.isEmpty(floatViewName)) {
             return null;
         }
-        for (AbsFloatView dokitView : mFloatViews) {
-            if (tag.equals(dokitView.mTag)) {
-                return dokitView;
+        for (AbsFloatView absFloatView : mFloatViews) {
+            if (floatViewName.equals(absFloatView.mFloatViewName)) {
+                return absFloatView;
             }
         }
         return null;
@@ -132,7 +140,7 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
         }
         Map<String, AbsFloatView> floatViewMap = new HashMap<>();
         for (AbsFloatView floatView : mFloatViews) {
-            floatViewMap.put(floatView.mTag, floatView);
+            floatViewMap.put(floatView.mFloatViewName, floatView);
         }
         return floatViewMap;
     }
@@ -200,11 +208,4 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
 
     }
 
-    void addListener(FloatViewManager.FloatViewAttachedListener listener) {
-        mListeners.add(listener);
-    }
-
-    void removeListener(FloatViewManager.FloatViewAttachedListener listener) {
-        mListeners.remove(listener);
-    }
 }

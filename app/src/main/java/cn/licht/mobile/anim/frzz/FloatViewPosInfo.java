@@ -23,17 +23,26 @@ public class FloatViewPosInfo {
         this.floatViewHeight = floatViewHeight;
     }
 
-    public void setLeftMargin(int leftMargin) {
-        this.leftMarginPercent = (float) leftMargin / 1080;
+    public void setLeftMargin(int screenWiidth, int leftMargin) {
+        if (screenWiidth == 0) {
+            leftMarginPercent = 0;
+        } else {
+            this.leftMarginPercent = (float) leftMargin / screenWiidth;
+        }
     }
 
-    public void setTopMargin(int topMargin) {
-        this.topMarginPercent = (float) topMargin / 1940;
+    public void setTopMargin(int screenHeight, int topMargin) {
+        if (screenHeight == 0) {
+            topMarginPercent = 0;
+        } else {
+            this.topMarginPercent = (float) topMargin / screenHeight;
+        }
     }
 
-    public void setPortrait() {
-        isPortrait = false;
+    public void setPortrait(boolean isPortrait) {
+        this.isPortrait = isPortrait;
     }
+
     public boolean isPortrait() {
         return isPortrait;
     }

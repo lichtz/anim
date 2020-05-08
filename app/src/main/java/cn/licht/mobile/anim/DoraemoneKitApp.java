@@ -10,7 +10,6 @@ public class DoraemoneKitApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        registerActivityLifecycleCallbacks(new FloatViewActivityLifecycleCallbacks());
-        FloatViewManager.getInstance().init(this);
+
     }
 }
