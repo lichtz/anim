@@ -148,6 +148,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatDispatchTouchProx
     }
 
     public void performDestroy() {
+        Log.d(TAG, "performDestroy: ");
         if (isSystemMode()) {
             Context context = getContext();
             if (context != null && mInnerReceiver != null) {
@@ -492,6 +493,7 @@ public abstract class AbsFloatView implements IFLoatView, FloatDispatchTouchProx
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
         FloatViewManager.getInstance().removeFloatViewPosInfo(mFloatViewName);
         mAttachActivity = null;
 

@@ -12,7 +12,6 @@ import cn.licht.mobile.anim.Utils;
 
 
 public class FloatViewActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
-    private static final String TAG = "FloatViewActivityLifecy";
 
 
     private int startedActivityCounts = 1;
@@ -20,13 +19,11 @@ public class FloatViewActivityLifecycleCallbacks implements Application.Activity
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated: ");
         recordActivityLifeCycleStatus(activity, LIFE_CYCLE_STATUS_CREATE);
     }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-        Log.d(TAG, "onActivityStarted: startedActivityCounts= " + startedActivityCounts);
 
         if (startedActivityCounts == 0) {
             FloatViewManager.getInstance().notifyForeground();
@@ -48,7 +45,6 @@ public class FloatViewActivityLifecycleCallbacks implements Application.Activity
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-        Log.d(TAG, "onActivityStopped: startedActivityCounts= " + startedActivityCounts);
         recordActivityLifeCycleStatus(activity, LIFE_CYCLE_STATUS_STOPPED);
         startedActivityCounts--;
         //通知app退出到后台

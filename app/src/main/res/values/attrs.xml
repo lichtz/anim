@@ -13,4 +13,8 @@
         <!--阴影部分的颜色-->
         <attr name="maxHeight" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="RippleLinearLayout">
+        <attr name="show_ripple" format="string"/>
+    </declare-styleable>
+
 </resources>

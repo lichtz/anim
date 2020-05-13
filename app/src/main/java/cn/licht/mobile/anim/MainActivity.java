@@ -3,20 +3,11 @@ package cn.licht.mobile.anim;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,33 +16,18 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONArray;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.didichuxing.doraemonkit.kit.core.DokitIntent;
-import com.didichuxing.doraemonkit.kit.core.DokitViewManager;
-import com.didichuxing.doraemonkit.kit.main.MainIconDokitView;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 
-import cn.licht.mobile.anim.dialog.BaseDialog;
-import cn.licht.mobile.anim.frzz.FloatViewActivityLifecycleCallbacks;
-import cn.licht.mobile.anim.frzz.FloatViewConstant;
 import cn.licht.mobile.anim.frzz.FloatViewManager;
 import cn.licht.mobile.anim.frzz.FloatViewWraper;
 import cn.licht.mobile.anim.frzz.IFlySpeakFloatView;
+import cn.licht.mobile.anim.widget.TextFolatView;
 import cn.licht.mobile.anim.widget.keyboard.KeyboardFullSafeWindow;
 
 public class MainActivity extends AppCompatActivity {
@@ -231,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
         FloatViewManager.getInstance().init(getApplication());
         FloatViewWraper floatViewWraper = new FloatViewWraper(IFlySpeakFloatView.class, getClass().getCanonicalName());
         FloatViewManager.getInstance().attach(this,floatViewWraper);
+
+
 
 
     }

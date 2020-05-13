@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_wtf"
     android:orientation="vertical"
     tools:context=".MainActivity">
     <FrameLayout
@@ -56,6 +57,30 @@
 
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content" />
+            <FrameLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+                <TextView
+                    android:background="#090980"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="比U币u"/>
+                <FrameLayout
+
+                    android:background="@drawable/shape_speak_unfloat_contain_view_left_bg"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                   >
+                    <TextView
+                        android:alpha="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+            </FrameLayout>
+
 
             <TextView
                 android:onClick="dettach"
@@ -79,6 +104,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:onClick="oo"
+                app:show_ripple="111"
                 android:id="@+id/pp"
                 />
 

@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "cn.licht.mobile.anim"
         minSdkVersion 21
-        targetSdkVersion 19
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -46,5 +46,6 @@ dependencies {
     implementation files('libs/fastjson-1.1.46.jar')
     debugImplementation "com.didichuxing.doraemonkit:doraemonkit:3.1.4"
     releaseImplementation "com.didichuxing.doraemonkit:doraemonkit-no-op:3.1.4"
+    implementation 'com.airbnb.android:lottie:2.8.0'
 
 }
