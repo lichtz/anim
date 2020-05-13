@@ -1,8 +1,10 @@
 package cn.licht.mobile.anim.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import cn.licht.mobile.anim.R;
@@ -23,7 +25,28 @@ public class TextFolatView extends AbsFloatView {
 
     @Override
     public void onViewCreated(FrameLayout rootView) {
-        rootView.setTranslationX(-70);
+        final View view = rootView.findViewById(R.id.bg);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int i = Utils.dp2px(getContext(), 200);
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
+                final int width = layoutParams.width;
+                ValueAnimator valueAnimator = ValueAnimator.ofInt(i);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int animatedValue = (int) animation.getAnimatedValue();
+                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
+                        layoutParams.width = width + animatedValue;
+                        view.setLayoutParams(layoutParams);
+                    }
+                });
+                valueAnimator.setDuration(280);
+                valueAnimator.start();
+            }
+        });
+
 
     }
 

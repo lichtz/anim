@@ -5,12 +5,7 @@
     android:background="@color/key_safe_finish"
     xmlns:app="http://schemas.android.com/apk/res-auto"
   >
-    <FrameLayout
-        android:id="@+id/speark_contain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/fold_contain"
@@ -23,13 +18,6 @@
             android:layout_width="28dp"
             android:layout_height="28dp"/>
 
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:src="@mipmap/log"-->
-<!--            app:lottie_loop="true"-->
-<!--            app:lottie_autoPlay="true"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_width="28dp"-->
-<!--            android:layout_height="28dp"/>-->
     </FrameLayout>
 
 

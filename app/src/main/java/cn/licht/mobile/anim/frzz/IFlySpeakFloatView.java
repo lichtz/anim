@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -18,6 +20,11 @@ import cn.licht.mobile.anim.Utils;
 public class IFlySpeakFloatView extends AbsFloatView {
 
     private static final String TAG = "IFlySpeakFloatView";
+    View leftUnFoldView = null;
+    View rightFoldView = null;
+    View unFoldView = null;
+    private int lastDiff = 0;
+
     private Animator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
@@ -41,19 +48,19 @@ public class IFlySpeakFloatView extends AbsFloatView {
         }
     };
 
-    private View.OnClickListener  onFoldContainClickListener = new View.OnClickListener() {
+    private View.OnClickListener onFoldContainClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             startUnfoldAnim();
         }
     };
-    private View.OnClickListener  onFoldButtonClickListener = new View.OnClickListener() {
+    private View.OnClickListener onFoldButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             startFoldAnim();
         }
     };
-    private View.OnClickListener onCloseIconClickListner =new View.OnClickListener() {
+    private View.OnClickListener onCloseIconClickListner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             detach();
@@ -92,9 +99,6 @@ public class IFlySpeakFloatView extends AbsFloatView {
         foldButton.setOnClickListener(onFoldButtonClickListener);
     }
 
-    View leftUnFoldView = null;
-    View rightFoldView = null;
-    View unFoldView = null;
 
     private View createUnFoldView(FrameLayout rootView) {
         int state = getFoldViewAside();
@@ -116,7 +120,6 @@ public class IFlySpeakFloatView extends AbsFloatView {
             if (unFoldView == rightFoldView) {
                 return unFoldView;
             }
-
             FrameLayout spearkContain = rootView.findViewById(R.id.speark_contain);
             spearkContain.removeView(unFoldView);
             unFoldView = rightFoldView;
@@ -129,78 +132,103 @@ public class IFlySpeakFloatView extends AbsFloatView {
 
     private void startFoldAnim() {
         onViewCreated(getRootView());
-        lastDiff =0;
+        lastDiff = 0;
         foldContain.setVisibility(View.VISIBLE);
+
+        Animator alphaUnFoldAnimator = ObjectAnimator.ofFloat(unFolfContainAlpha, "alpha", 1, 0);
+        alphaUnFoldAnimator.setDuration(2000);
+
+        Animator alphaFoldAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 0, 1);
+        alphaFoldAnimator.setDuration(2000);
+
+
         int foldViewAside = getFoldViewAside();
-        ValueAnimator valueAnimator;
+        ObjectAnimator translationxAnimator;
         if (foldViewAside == 0) {
-            int endLeft = getUnfoldViewWidth() - getfoldViewWidth();
-            final int leftMargin = getUnFoldParams().leftMargin;
-            valueAnimator = ValueAnimator.ofInt(endLeft);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            int startLeft = getfoldViewWidth() - getUnfoldViewWidth();
+             translationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", 0, startLeft);
+            translationxAnimator.setDuration(280);
+            translationxAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
+
+            translationxAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int animatedValue = (int) animation.getAnimatedValue();
-                    getUnFoldParams().leftMargin = leftMargin - animatedValue;
-                    invalidateLeftUnFoldView();
+                public void onAnimationStart(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    setFoldViewStyle();
+                    unFolfContain.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
                 }
             });
 
+            translationxAnimator.start();
 
         } else {
             int leftDiff = getUnfoldViewWidth() - getfoldViewWidth();
-            valueAnimator = ValueAnimator.ofInt(leftDiff);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            unFolfContain.setTranslationX(0);
+             translationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", 0, leftDiff);
+            translationxAnimator.setDuration(2800);
+            translationxAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
+
+
+//            ValueAnimator valueAnimator = ValueAnimator.ofInt(leftDiff);
+//            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                @Override
+//                public void onAnimationUpdate(ValueAnimator animation) {
+//                    int animatedValue = (int) animation.getAnimatedValue();
+//                    invalidateRightAnimView(animatedValue - lastDiff);
+//                    lastDiff = animatedValue;
+//                }
+//            });
+//            valueAnimator.setDuration(28000);
+//            valueAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
+
+
+            translationxAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int animatedValue = (int) animation.getAnimatedValue();
-                    invalidateRightAnimView(animatedValue - lastDiff  );
-                    lastDiff = animatedValue;
+                public void onAnimationStart(Animator animation) {
+
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+
+                    setFoldViewStyle();
+                    unFolfContain.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
                 }
             });
 
+
         }
-        Animator alphaUnFoldAnimator = ObjectAnimator.ofFloat(unFolfContainAlpha, "alpha", 1, 0);
-        alphaUnFoldAnimator.setDuration(200);
-
-        Animator alphaFoldAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 0, 1);
-        alphaFoldAnimator.setDuration(200);
-
         final AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(alphaUnFoldAnimator, alphaFoldAnimator);
-
-
-        valueAnimator.setDuration(280);
-        valueAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
-        valueAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                animatorSet.start();
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                setFoldViewStyle();
-                unFolfContain.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        valueAnimator.start();
+        animatorSet.playTogether(alphaUnFoldAnimator, alphaFoldAnimator,translationxAnimator);
+        animatorSet.start();
 
 
     }
 
-    private int lastDiff = 0;
 
     private void startUnfoldAnim() {
         onViewCreated(getRootView());
@@ -208,44 +236,59 @@ public class IFlySpeakFloatView extends AbsFloatView {
         foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_unstroke_bg);
         unFolfContain.setVisibility(View.VISIBLE);
         int foldViewAside = getFoldViewAside();
-        final ValueAnimator valueAnimator;
+        ValueAnimator valueAnimator = null;
+        ObjectAnimator translationxAnimator = null;
         if (foldViewAside == 0) {
-            final int startLeft = getUnfoldViewWidth() - getfoldViewWidth();
-            FrameLayout.LayoutParams unFoldParams = getUnFoldParams();
-            unFoldParams.leftMargin = -startLeft;
-            unFoldParams.rightMargin = 0;
-            valueAnimator = ValueAnimator.ofInt(startLeft);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int animatedValue = (int) animation.getAnimatedValue();
-                    getUnFoldParams().leftMargin = animatedValue - startLeft;
-                    invalidateLeftUnFoldView();
-                }
-            });
+            int startLeft = getfoldViewWidth() - getUnfoldViewWidth();
+            translationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", startLeft, 0);
+            translationxAnimator.setDuration(280);
+            translationxAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
 
         } else {
-             int leftDiff = getUnfoldViewWidth() - getfoldViewWidth();
-            valueAnimator = ValueAnimator.ofInt(leftDiff);
+//            if (isSystemMode()){
+//                            valueAnimator = ValueAnimator.ofInt(leftDiff);
+//            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                @Override
+//                public void onAnimationUpdate(ValueAnimator animation) {
+//
+//                    int animatedValue = (int) animation.getAnimatedValue();
+//                    invalidateRightAnimView(lastDiff - animatedValue);
+//                    lastDiff = animatedValue;
+//                }
+//            });
+//            valueAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
+//            valueAnimator.setDuration(280);
+//            }else {
+//
+//
+//
+//
+//            }
+            int leftDiff = getUnfoldViewWidth() - getfoldViewWidth();
+            unFolfContain.setTranslationX(leftDiff);
+             translationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", leftDiff, 0);
+            translationxAnimator.setDuration(2800);
+            translationxAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
 
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
 
-                    int animatedValue = (int) animation.getAnimatedValue();
-                    invalidateRightAnimView(lastDiff - animatedValue);
-                    lastDiff = animatedValue;
-                }
-            });
+
         }
-        valueAnimator.setInterpolator(new EaseCubicInterpolator(1, 0, 0.83f, 1));
-        valueAnimator.setDuration(280);
+
+        final ValueAnimator finalValueAnimator = valueAnimator;
+        final ObjectAnimator finalTranslationxAnimator = translationxAnimator;
+
+        Animator alphaUnfoldAnimator = ObjectAnimator.ofFloat(unFolfContainAlpha, "alpha", 0, 1);
+        alphaUnfoldAnimator.setDuration(2000);
         Animator alphaAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 1, 0);
-        alphaAnimator.setDuration(200);
+        alphaAnimator.setDuration(2000);
         alphaAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                valueAnimator.start();
+                if (finalValueAnimator != null) {
+                    finalValueAnimator.start();
+                } else {
+                    finalTranslationxAnimator.start();
+                }
 
             }
 
@@ -266,15 +309,13 @@ public class IFlySpeakFloatView extends AbsFloatView {
             }
         });
 
-        Animator alphaUnfoldAnimator = ObjectAnimator.ofFloat(unFolfContainAlpha, "alpha", 0, 1);
-        alphaUnfoldAnimator.setDuration(200);
+
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(alphaAnimator, alphaUnfoldAnimator);
         animatorSet.start();
 
 
     }
-
 
 
     @Override
@@ -388,35 +429,29 @@ public class IFlySpeakFloatView extends AbsFloatView {
      * @return
      */
     private int getFoldViewAside() {
-        boolean isLeft  = true;
-        if (FloatViewConstant.isSystemFloatMode()){
+        boolean isLeft = true;
+        if (FloatViewConstant.isSystemFloatMode()) {
             if (getSystemLayoutParams() != null) {
 
                 if (getSystemLayoutParams().x > 10) {
                     isLeft = false;
                 }
             }
-        }else {
+        } else {
             if (getNormalLayoutParams() != null) {
                 if (getNormalLayoutParams().leftMargin > 10) {
                     isLeft = false;
                 }
             }
         }
-        return isLeft?0:1;
+        return isLeft ? 0 : 1;
     }
 
-    private FrameLayout.LayoutParams getUnFoldParams() {
-        return (FrameLayout.LayoutParams) unFolfContain.getLayoutParams();
-    }
-
-    private void invalidateLeftUnFoldView() {
-        unFolfContain.setLayoutParams(getUnFoldParams());
-    }
 
     private void invalidateRightAnimView(int dx) {
         if (isSystemMode()) {
             getSystemLayoutParams().x += dx;
+            Log.d(TAG, "invalidateRightAnimView: x: "+ getSystemLayoutParams().x +"   dx :"+ dx);
         } else {
             getNormalLayoutParams().leftMargin += dx;
         }
@@ -425,15 +460,19 @@ public class IFlySpeakFloatView extends AbsFloatView {
     }
 
 
-    private void setFoldViewStyle(){
-        if (foldContain != null){
+    private void setFoldViewStyle() {
+        if (foldContain != null) {
             int foldViewAside = getFoldViewAside();
-            if (foldViewAside  == 0){
+            if (foldViewAside == 0) {
                 foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_left_bg);
-            }else {
+            } else {
                 foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_right_bg);
             }
         }
+    }
+
+    private  void  attachUnFolatLeftView(){
+
     }
 
 

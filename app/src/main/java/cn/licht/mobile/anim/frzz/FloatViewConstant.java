@@ -10,7 +10,7 @@ public class FloatViewConstant {
     public static final int MODE_REGIONAL_FLOAT_VIEW = 2;
 
 
-    public static boolean IS_SYSTEM_FLOAT_MODE = false;
+    public static boolean IS_SYSTEM_FLOAT_MODE = true;
     public static  boolean isSystemFloatMode(){
         return  IS_SYSTEM_FLOAT_MODE;
     }

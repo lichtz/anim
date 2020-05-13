@@ -4,8 +4,9 @@
     android:id="@+id/unfold_contain"
     android:layout_width="313.5dp"
     android:layout_height="50dp"
+    android:translationX="253dp"
     android:background="@drawable/shape_speak_unfloat_contain_view_right_bg"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <FrameLayout
         android:id="@+id/unfold_alpha_fm"
@@ -26,6 +27,7 @@
 
 
         <ImageView
+            android:id="@+id/play_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"

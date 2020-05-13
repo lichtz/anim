@@ -27,6 +27,7 @@ import java.util.Set;
 import cn.licht.mobile.anim.frzz.FloatViewManager;
 import cn.licht.mobile.anim.frzz.FloatViewWraper;
 import cn.licht.mobile.anim.frzz.IFlySpeakFloatView;
+import cn.licht.mobile.anim.frzz.SpeakFloatView;
 import cn.licht.mobile.anim.widget.TextFolatView;
 import cn.licht.mobile.anim.widget.keyboard.KeyboardFullSafeWindow;
 
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void oo(View view) {
         FloatViewManager.getInstance().init(getApplication());
-        FloatViewWraper floatViewWraper = new FloatViewWraper(IFlySpeakFloatView.class, getClass().getCanonicalName());
+        FloatViewWraper floatViewWraper = new FloatViewWraper(SpeakFloatView.class, getClass().getCanonicalName());
         FloatViewManager.getInstance().attach(this,floatViewWraper);
 
 
