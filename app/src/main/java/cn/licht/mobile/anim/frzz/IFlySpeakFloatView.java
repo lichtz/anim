@@ -91,7 +91,7 @@ public class IFlySpeakFloatView extends AbsFloatView {
         foldContain.setLayoutParams(layoutParams);
         View unFloldView = createUnFoldView(rootView);
         unFolfContain = unFloldView.findViewById(R.id.unfold_contain);
-        unFolfContainAlpha = unFloldView.findViewById(R.id.unfold_alpha_fm);
+        unFolfContainAlpha = unFloldView.findViewById(R.id.play_icon);
         View foldButton = unFloldView.findViewById(R.id.fold_button);
         View closeIcon = unFloldView.findViewById(R.id.close);
         closeIcon.setOnClickListener(onCloseIconClickListner);
@@ -233,7 +233,6 @@ public class IFlySpeakFloatView extends AbsFloatView {
     private void startUnfoldAnim() {
         onViewCreated(getRootView());
         lastDiff = 0;
-        foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_unstroke_bg);
         unFolfContain.setVisibility(View.VISIBLE);
         int foldViewAside = getFoldViewAside();
         ValueAnimator valueAnimator = null;

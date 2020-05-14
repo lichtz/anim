@@ -1,17 +1,15 @@
 package cn.licht.mobile.anim.frzz;
 
 import android.animation.Animator;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Point;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
-import androidx.fragment.app.FragmentManager;
 
 import cn.licht.mobile.anim.R;
 import cn.licht.mobile.anim.Utils;
@@ -19,7 +17,7 @@ import cn.licht.mobile.anim.Utils;
 public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewControl {
 
     private static final String TAG = "IFlySpeakFloatView";
-
+    private View foldContain;
     private Animator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
@@ -46,12 +44,9 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
     private View.OnClickListener onFoldContainClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            startUnfoldAnim();
+            startUnfoldAnim(true);
         }
     };
-
-
-    private View foldContain;
 
 
     @Override
@@ -69,6 +64,15 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
     public void onViewCreated(FrameLayout rootView) {
         foldContain = rootView.findViewById(R.id.fold_contain);
         foldContain.setOnClickListener(onFoldContainClickListener);
+        Point floatViewPos = FloatViewManager.getInstance().getFloatViewPos(getClass().getSimpleName());
+        if (floatViewPos != null) {
+            if (floatViewPos.x > 10) {
+                foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_right_bg);
+            } else {
+                foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_left_bg);
+            }
+        }
+
 
     }
 
@@ -82,6 +86,7 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
             }
 
             FloatViewWraper floatViewWraper = new FloatViewWraper(SpeakFloatLeftView.class, getActivity().getClass().getCanonicalName());
+            floatViewWraper.mode = FloatViewConstant.MODE_REGIONAL_FLOAT_VIEW;
             FloatViewManager.getInstance().attach(getActivity(), floatViewWraper);
 
         } else {
@@ -90,6 +95,7 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
                 FloatViewManager.getInstance().detach(SpeakFloatLeftView.class);
             }
             FloatViewWraper floatViewWraper = new FloatViewWraper(SpeakFloatRightView.class, getActivity().getClass().getCanonicalName());
+            floatViewWraper.mode = FloatViewConstant.MODE_REGIONAL_FLOAT_VIEW;
             FloatViewManager.getInstance().attach(getActivity(), floatViewWraper);
 
         }
@@ -97,70 +103,82 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
 
     }
 
-
-
-
-    private void startUnfoldAnim() {
+    private void startUnfoldAnim(final boolean noticeUnFoldView) {
         attachUnFloatView();
-        Animator alphaAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 1, 0);
-        alphaAnimator.setDuration(2000);
-        alphaAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_unstroke_bg);
-                int foldViewAside = getFoldViewAside();
-                AbsFloatView floatView = null;
-                if (foldViewAside == 0) {
-                    floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatLeftView.class.getSimpleName());
+        if (noticeUnFoldView) {
+            int foldViewAside = getFoldViewAside();
+            AbsFloatView floatView = null;
+            if (foldViewAside == 0) {
+                floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatLeftView.class.getSimpleName());
 
-                } else {
-                    floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatRightView.class.getSimpleName());
-                }
-                if (floatView instanceof ISpeakFloatViewControl) {
-                    ((ISpeakFloatViewControl) floatView).onUnFoldViewAnimStart();
-                }
-
-
+            } else {
+                floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatRightView.class.getSimpleName());
             }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                foldContain.setVisibility(View.GONE);
-
+            if (floatView instanceof ISpeakFloatViewControl) {
+                ((ISpeakFloatViewControl) floatView).onUnFoldViewAnimStart();
             }
+        }
+        foldContain.setVisibility(View.GONE);
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        alphaAnimator.start();
+//        Animator alphaAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 1, 0);
+//        alphaAnimator.setDuration(2000);
+//        alphaAnimator.addListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                foldContain.setBackgroundResource(R.drawable.shape_speak_float_view_unstroke_bg);
+//                if (noticeUnFoldView) {
+//                    int foldViewAside = getFoldViewAside();
+//                    AbsFloatView floatView = null;
+//                    if (foldViewAside == 0) {
+//                        floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatLeftView.class.getSimpleName());
+//
+//                    } else {
+//                        floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatRightView.class.getSimpleName());
+//                    }
+//                    if (floatView instanceof ISpeakFloatViewControl) {
+//                        ((ISpeakFloatViewControl) floatView).onUnFoldViewAnimStart();
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                foldContain.setVisibility(View.GONE);
+//
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        });
+//        alphaAnimator.start();
 
     }
 
     private void startFoldAnim() {
-        attachUnFloatView();
-        foldContain.setVisibility(View.VISIBLE);
+
         Animator alphaFoldAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 0, 1);
-        alphaFoldAnimator.setDuration(2000);
+        alphaFoldAnimator.setDuration(200);
         alphaFoldAnimator.start();
     }
 
 
-
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume: ");
 
     }
 
     @Override
     public void onPause() {
-
+        Log.d(TAG, "onPause: ");
     }
 
     @Override
@@ -275,23 +293,26 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
     }
 
 
-
-
     @Override
     public void onFoldViewAnimStart() {
-        startFoldAnim();
+        Log.d(TAG, "onFoldViewAnimStart: ");
 
     }
 
     @Override
     public void onFoldViewAnimStop() {
+        //        startFoldAnim();
+
         setFoldViewStyle();
+        if (foldContain != null) {
+            foldContain.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
     public void onUnFoldViewAnimStart() {
-        startUnfoldAnim();
+        startUnfoldAnim(false);
 
     }
 
@@ -304,4 +325,6 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
     public void onClose() {
         detach();
     }
+
+
 }

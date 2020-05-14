@@ -11,7 +11,6 @@ public class Main2Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        overridePendingTransition(R.anim.page_slide_button_enter, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         TextView viewById = findViewById(R.id.scrollView);
@@ -46,7 +45,6 @@ public class Main2Activity extends AppCompatActivity {
     private void finish(boolean b) {
         super.finish();
         if (b) {
-            overridePendingTransition(0, R.anim.page_slide_button_exit);
         }
 
     }

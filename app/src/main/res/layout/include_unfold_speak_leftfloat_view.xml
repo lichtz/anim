@@ -13,13 +13,6 @@
     android:visibility="gone"
     >
 
-
-    <FrameLayout
-        android:id="@+id/unfold_alpha_fm"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0"
-        >
         <FrameLayout
             android:id="@+id/close"
             android:layout_width="42dp"
@@ -65,23 +58,19 @@
                 android:max="100"
                 android:progress="50" />
 
-            <ImageView
-                android:id="@+id/play_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="244.5dp"
-                android:src="@mipmap/icon_speak_control_play" />
         </FrameLayout>
 
 
         <ImageView
+            android:alpha="0"
+            android:id="@+id/play_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="244.5dp"
             android:src="@mipmap/icon_speak_control_play" />
         <FrameLayout
+            android:alpha="0"
             android:id="@+id/fold_button"
             android:layout_marginStart="284.5dp"
             android:layout_width="29dp"
@@ -96,6 +85,5 @@
 
 
     </FrameLayout>
-</FrameLayout>
 </FrameLayout>
 

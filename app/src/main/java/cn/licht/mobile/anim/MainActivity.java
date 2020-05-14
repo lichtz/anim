@@ -24,9 +24,11 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Set;
 
+import cn.licht.mobile.anim.frzz.AbsFloatView;
 import cn.licht.mobile.anim.frzz.FloatViewManager;
 import cn.licht.mobile.anim.frzz.FloatViewWraper;
 import cn.licht.mobile.anim.frzz.IFlySpeakFloatView;
+import cn.licht.mobile.anim.frzz.SpeakFloatLeftView;
 import cn.licht.mobile.anim.frzz.SpeakFloatView;
 import cn.licht.mobile.anim.widget.TextFolatView;
 import cn.licht.mobile.anim.widget.keyboard.KeyboardFullSafeWindow;
@@ -205,8 +207,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void oo(View view) {
+        AbsFloatView floatView = FloatViewManager.getInstance().getFloatView(this, SpeakFloatLeftView.class.getSimpleName());
+
+        AbsFloatView absFloatView = FloatViewManager.getInstance().getFloatView(this, SpeakFloatView.class.getSimpleName());
+        if (floatView != null){
+            Log.d(TAG, "oo:  nulllllll");
+            FloatViewManager.getInstance().detach(floatView);
+        }
+        if (absFloatView != null){
+            FloatViewManager.getInstance().detach(absFloatView);
+        }
         FloatViewManager.getInstance().init(getApplication());
-        FloatViewWraper floatViewWraper = new FloatViewWraper(SpeakFloatView.class, getClass().getCanonicalName());
+        FloatViewWraper floatViewWraper = new FloatViewWraper(SpeakFloatLeftView.class, getClass().getCanonicalName());
         FloatViewManager.getInstance().attach(this,floatViewWraper);
 
 

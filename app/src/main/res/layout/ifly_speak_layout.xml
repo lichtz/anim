@@ -2,8 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/key_safe_finish"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
   >
     <FrameLayout
         android:id="@+id/speark_contain"
@@ -16,7 +15,7 @@
         android:id="@+id/fold_contain"
         android:layout_width="60.5dp"
         android:layout_height="50dp"
-        android:background="@drawable/shape_speak_float_view_left_bg">
+        android:alpha="1">
         <ImageView
        android:layout_gravity="center"
             android:src="@mipmap/log"

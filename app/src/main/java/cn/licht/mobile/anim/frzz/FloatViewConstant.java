@@ -1,6 +1,8 @@
 package cn.licht.mobile.anim.frzz;
 
 
+import android.graphics.Point;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,4 +16,5 @@ public class FloatViewConstant {
     public static  boolean isSystemFloatMode(){
         return  IS_SYSTEM_FLOAT_MODE;
     }
+
 }

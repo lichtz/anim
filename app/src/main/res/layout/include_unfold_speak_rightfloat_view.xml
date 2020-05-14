@@ -6,14 +6,11 @@
     android:layout_height="50dp"
     android:translationX="253dp"
     android:background="@drawable/shape_speak_unfloat_contain_view_right_bg"
-    android:visibility="visible">
+    android:visibility="gone">
 
-    <FrameLayout
-        android:id="@+id/unfold_alpha_fm"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="1">
+
         <FrameLayout
+            android:alpha="0"
             android:id="@+id/fold_button"
             android:layout_width="29dp"
             android:layout_height="match_parent">
@@ -27,6 +24,7 @@
 
 
         <ImageView
+            android:alpha="0"
             android:id="@+id/play_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -82,5 +80,4 @@
 
 
 
-    </FrameLayout>
 </FrameLayout>
