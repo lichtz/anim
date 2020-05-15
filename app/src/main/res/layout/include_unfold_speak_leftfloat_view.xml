@@ -55,6 +55,7 @@
                 android:layout_height="2dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="13.5dp"
+                android:progressDrawable="@drawable/speak_progress_bg"
                 android:max="100"
                 android:progress="50" />
 

@@ -217,7 +217,10 @@ public class MainActivity extends AppCompatActivity {
         if (absFloatView != null){
             FloatViewManager.getInstance().detach(absFloatView);
         }
+
         FloatViewManager.getInstance().init(getApplication());
+//        FloatViewWraper s = new FloatViewWraper(SpeakFloatView.class, getClass().getCanonicalName());
+//        FloatViewManager.getInstance().attach(this,s);
         FloatViewWraper floatViewWraper = new FloatViewWraper(SpeakFloatLeftView.class, getClass().getCanonicalName());
         FloatViewManager.getInstance().attach(this,floatViewWraper);
 

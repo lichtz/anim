@@ -37,7 +37,8 @@
     <color name="key_safe_stroke">#cccccc</color>
     <color name="key_safe_finish">#d33b30</color>
     <color name="key_safe_title">#eeeeee</color>
-
+    <color name="progress">#5385F7</color>
+    <color name="progressbg">#e0e3eb</color>
     <color name="map_plugin_location_layer_blue">#4882C6</color>
     <color name="map_plugin_location_layer_gray">#263D57</color>
     <color name="pwd_dialog_cgb_red">#D33b30</color>

@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -118,7 +119,7 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
                 ((ISpeakFloatViewControl) floatView).onUnFoldViewAnimStart();
             }
         }
-        foldContain.setVisibility(View.GONE);
+//        foldContain.setVisibility(View.GONE);
 
 //        Animator alphaAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 1, 0);
 //        alphaAnimator.setDuration(2000);
@@ -163,10 +164,40 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
     }
 
     private void startFoldAnim() {
-
-        Animator alphaFoldAnimator = ObjectAnimator.ofFloat(foldContain, "alpha", 0, 1);
-        alphaFoldAnimator.setDuration(200);
+        if (getRootView().getAlpha() == 1){
+            AbsFloatView floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatLeftView.class.getSimpleName());
+            if (floatView instanceof  ISpeakFloatViewControl){
+                ((ISpeakFloatViewControl) floatView).onFoldViewAnimStop();
+            }
+            return;
+        }
+        Animator alphaFoldAnimator = ObjectAnimator.ofFloat(getRootView(), "alpha", 0, 1);
+        alphaFoldAnimator.setDuration(50);
         alphaFoldAnimator.start();
+        alphaFoldAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                AbsFloatView floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatLeftView.class.getSimpleName());
+                if (floatView instanceof  ISpeakFloatViewControl){
+                    ((ISpeakFloatViewControl) floatView).onFoldViewAnimStop();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
 
@@ -301,12 +332,8 @@ public class SpeakFloatView extends AbsFloatView implements ISpeakFloatViewContr
 
     @Override
     public void onFoldViewAnimStop() {
-        //        startFoldAnim();
-
         setFoldViewStyle();
-        if (foldContain != null) {
-            foldContain.setVisibility(View.VISIBLE);
-        }
+        getRootView().setVisibility(View.VISIBLE);
 
     }
 

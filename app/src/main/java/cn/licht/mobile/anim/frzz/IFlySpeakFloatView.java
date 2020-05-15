@@ -109,7 +109,7 @@ public class IFlySpeakFloatView extends AbsFloatView {
             if (unFoldView == leftUnFoldView) {
                 return unFoldView;
             }
-            FrameLayout spearkContain = rootView.findViewById(R.id.speark_contain);
+            FrameLayout spearkContain = rootView.findViewById(R.id.fold_contain);
             spearkContain.removeView(unFoldView);
             unFoldView = leftUnFoldView;
             spearkContain.addView(unFoldView);
@@ -120,7 +120,7 @@ public class IFlySpeakFloatView extends AbsFloatView {
             if (unFoldView == rightFoldView) {
                 return unFoldView;
             }
-            FrameLayout spearkContain = rootView.findViewById(R.id.speark_contain);
+            FrameLayout spearkContain = rootView.findViewById(R.id.fold_contain);
             spearkContain.removeView(unFoldView);
             unFoldView = rightFoldView;
             spearkContain.addView(unFoldView);

@@ -36,6 +36,7 @@ public class SystemFloatViewManager implements FloatViewManagerInterface {
                 }
             }
             AbsFloatView floatView = floatViewData.getFloatView().newInstance();
+
             mFloatViews.add(floatView);
             floatView.setActivity(activity);
             floatView.performCreate(mContext);

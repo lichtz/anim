@@ -91,6 +91,9 @@ public class SpeakFloatRightView extends AbsFloatView implements  ISpeakFloatVie
 
 
     private void startUnfoldAnim() {
+        if (unFolfContain.getTranslationX() == 0){
+            return;
+        }
         unFolfContain.setVisibility(View.VISIBLE);
         if (unFoldTranslationxAnimator != null && unFoldTranslationxAnimator.isRunning()) {
             return;
@@ -102,7 +105,6 @@ public class SpeakFloatRightView extends AbsFloatView implements  ISpeakFloatVie
             unFoldTranslationxAnimator.setDuration(280);
             unFoldTranslationxAnimator.setInterpolator(easeCubicInterpolator);
         }
-        int startLeft2 = getfoldViewWidth() - getUnfoldViewWidth();
 
         if (unFoldPlayIconAlphaAnimator == null) {
             unFoldPlayIconAlphaAnimator = ObjectAnimator.ofFloat(playIcon, "alpha", 0, 1);
@@ -180,12 +182,15 @@ public class SpeakFloatRightView extends AbsFloatView implements  ISpeakFloatVie
     private ObjectAnimator foldTranslationxAnimator = null;
     private AnimatorSet foldAnimatorSet = null;
     private void startFoldAnim() {
+        int endX =getUnfoldViewWidth() - getfoldViewWidth()  ;
+        if (unFolfContain.getTranslationX() == endX ){
+            return;
+        }
         attachFloatView();
         if (foldTranslationxAnimator != null && foldTranslationxAnimator.isRunning()){
             return;
         }
 
-        final AbsFloatView floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatView.class.getSimpleName());
         if (foldPlayIconAlphaAnimator == null) {
             foldPlayIconAlphaAnimator = ObjectAnimator.ofFloat(playIcon, "alpha", 1, 0);
             foldPlayIconAlphaAnimator.setDuration(200);
@@ -202,8 +207,8 @@ public class SpeakFloatRightView extends AbsFloatView implements  ISpeakFloatVie
 
 
         if (foldTranslationxAnimator == null) {
-            int startLeft =getUnfoldViewWidth() - getfoldViewWidth()  ;
-            foldTranslationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", 0, startLeft);
+
+            foldTranslationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", 0, endX);
             foldTranslationxAnimator.setDuration(280);
             foldTranslationxAnimator.setInterpolator(easeCubicInterpolator);
 
@@ -214,7 +219,7 @@ public class SpeakFloatRightView extends AbsFloatView implements  ISpeakFloatVie
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-
+                     AbsFloatView floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatView.class.getSimpleName());
                     if (floatView instanceof ISpeakFloatViewControl) {
                         ((ISpeakFloatViewControl) floatView).onFoldViewAnimStop();
                     }
@@ -261,8 +266,6 @@ public class SpeakFloatRightView extends AbsFloatView implements  ISpeakFloatVie
         });
         foldAnimatorSet.start();
 
-        int startLeft =getUnfoldViewWidth() - getfoldViewWidth()  ;
-        Log.d(TAG, "startFoldAnim: startleftXX :" +startLeft);
 
     }
 

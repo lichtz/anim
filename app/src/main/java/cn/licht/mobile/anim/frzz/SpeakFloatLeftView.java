@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import cn.licht.mobile.anim.R;
@@ -34,7 +35,6 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
             detach();
         }
     };
-
 
 
     @Override
@@ -95,10 +95,15 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
     private AnimatorSet unFoldAnimatorSet = null;
 
     private void startUnfoldAnim() {
+        if (unFolfContain.getTranslationX() == 0) {
+            return;
+        }
+
+        unFolfContain.setVisibility(View.VISIBLE);
+
         if (unFoldTranslationxAnimator != null && unFoldTranslationxAnimator.isRunning()) {
             return;
         }
-        unFolfContain.setVisibility(View.VISIBLE);
         int startLeft = getfoldViewWidth() - getUnfoldViewWidth();
         Log.d(TAG, "startUnfoldAnim: startleftX : " + startLeft);
         unFolfContain.setTranslationX(startLeft);
@@ -179,7 +184,6 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
         unFoldTranslationxAnimator.start();
 
 
-
     }
 
     private Animator foldPlayIconAlphaAnimator = null;
@@ -188,8 +192,13 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
     private AnimatorSet foldAnimatorSet = null;
 
     private void startFoldAnim() {
+        attachFloatView();
+        int endX = getfoldViewWidth() - getUnfoldViewWidth();
+        if (unFolfContain.getTranslationX() == endX) {
+            return;
+        }
 
-        if (foldTranslationxAnimator != null && foldTranslationxAnimator.isRunning()){
+        if (foldTranslationxAnimator != null && foldTranslationxAnimator.isRunning()) {
             return;
         }
 
@@ -209,9 +218,8 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
 
 
         if (foldTranslationxAnimator == null) {
-            int startLeft = getfoldViewWidth() - getUnfoldViewWidth();
-            Log.d(TAG, "startFoldAnim: startleftX :" +startLeft);
-            foldTranslationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", 0, startLeft);
+
+            foldTranslationxAnimator = ObjectAnimator.ofFloat(unFolfContain, "translationX", 0, endX);
             foldTranslationxAnimator.setDuration(280);
             foldTranslationxAnimator.setInterpolator(easeCubicInterpolator);
 
@@ -222,13 +230,13 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    attachFloatView();
                     final AbsFloatView floatView = FloatViewManager.getInstance().getFloatView(getActivity(), SpeakFloatView.class.getSimpleName());
                     if (floatView instanceof ISpeakFloatViewControl) {
                         ((ISpeakFloatViewControl) floatView).onFoldViewAnimStop();
                     }
                     unFolfContain.setVisibility(View.GONE);
                     detach();
+
                 }
 
                 @Override
@@ -242,8 +250,6 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
                 }
             });
         }
-
-
 
 
         foldAnimatorSet.addListener(new Animator.AnimatorListener() {
@@ -271,11 +277,8 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
         foldAnimatorSet.start();
 
 
-
-
-
         int startLeft = getfoldViewWidth() - getUnfoldViewWidth();
-        Log.d(TAG, "startFoldAnim: startleftXX :" +startLeft);
+        Log.d(TAG, "startFoldAnim: startleftXX :" + startLeft);
 
     }
 
@@ -337,7 +340,6 @@ public class SpeakFloatLeftView extends AbsFloatView implements ISpeakFloatViewC
         }
 
     }
-
 
 
 }
